@@ -28,6 +28,7 @@ useDefaultConfig.prod.resolve.alias = {
 
 setProxy(envConfigData);
 if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
+  require('./config-env')(envConfigData.mode); // Save config to config.xml
   processPlatform();
 }
 

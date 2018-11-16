@@ -1,5 +1,4 @@
 var chalk = require('chalk');
-var configTool = require('../config-env')
 var _fs = require('fs-extra')
 
 module.exports = function (ctx) {
