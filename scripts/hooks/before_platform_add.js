@@ -25,7 +25,6 @@ module.exports = function (ctx) {
     } else if (envMode !== envData.mode) { // overwrite file && remove platforms dir.
       _fs.removeSync(platformPath); // Remove platforms
       if (!fs.existsSync(platformPath)) { // check
-        console.log(chalk.yellow(`\n Recreate dir: ${platformPath}... \n `));
         fs.mkdirSync(platformPath);
       }
       envWriter(envMode); // Save

@@ -1,10 +1,11 @@
 const chalk = require("chalk");
 const fs = require('fs');
+const _fs = require('fs-extra');
 const path = require('path');
 const useDefaultConfig = require('@ionic/app-scripts/config/webpack.config.js');
 
 var argv = require('minimist')(process.argv.slice(2));
-var env = argv.env ? argv.env : '';
+var env = argv.env ? argv.env : 'dev'; // Set default env='dev'
 var release = argv.release ? true : false;
 
 outputBanner();
@@ -26,6 +27,9 @@ useDefaultConfig.prod.resolve.alias = {
 };
 
 setProxy(envConfigData);
+if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
+  processPlatform();
+}
 
 /**
  * Set serve's proxy
@@ -48,9 +52,6 @@ function setProxy(configData) {
 
 function outputBanner() {
   let envCpy = env + '';
-  if (envCpy === '') {
-    envCpy = 'default';
-  }
   let tmplEnv = envCpy + '';
   if (env.length < 15) {
     for (let i = 0; i < 15 - envCpy.length; i++) {
@@ -72,27 +73,35 @@ function outputBanner() {
 
 function processPlatform() {
   let platform = process.env.IONIC_PLATFORM;
-  // 判断当前环境
   let envConfigFile = path.resolve("src", 'environments', "platform.env.json.tmp");
   if (!fs.existsSync(envConfigFile)) {
-    console.error(chalk.red(`\n Please readd flatform at first.`));
+    console.error(chalk.red(`\n Please readd platforms.`));
     process.exit(-1);
   }
   try {
     let envConfig = JSON.parse(fs.readFileSync(envConfigFile, "utf-8"));
-    if (envConfig["environment"] === env) {
-      console.log(chalk.blue("Environment has no changed!. \n ")); // env 没有改动，继续编译
-      return;
+    if (typeof envConfig.mode === "undefined") {
+      console.error(chalk.red(` \n [Error] missing --env or ${envConfigFile} propertie 'mode' was undefined.`));
+      process.exit(-1);
     }
-    // env 有变动，重新添加 platform
-    let currentEnv = envConfig["environment"];
-    console.log(chalk.blue(`Environment will change: ${currentEnv} ====> ${env} \n `));
+    if (envConfig.mode === env) {
+      // console.log(chalk.blue("Environment have no change. \n ")); // env have no change.
+      return; // no change,go on.
+    }
+    // env has changed. remove all platforms and readd.
+    console.log(chalk.blue(`Environment will change: ${envConfig.mode} ====> ${env} \n `));
+    let platformPath = path.resolve('platforms');
+    _fs.removeSync(platformPath); // Remove platforms
+    if (!fs.existsSync(platformPath)) { // check
+      fs.mkdirSync(platformPath);
+    }
     let execSync = require('child_process').execSync;
-    execSync(`ionic cordova platform remove ${platform}`);
-    execSync(`ionic cordova platform add ${platform}  -- --env=${env}`);
-    // envConfig["environment"] = env;
-    // fs.writeFileSync(envConfigFile, JSON.stringify(envConfig));
-    // console.log(chalk.blue("Save environment.config. \n "));
+    execSync(`ionic cordova platform remove ${platform}`, {
+      stdio: [0, 1, 2]
+    });
+    execSync(`ionic cordova platform add ${platform}  -- --env=${env}`, {
+      stdio: [0, 1, 2]
+    });
   } catch (error) {
     console.error(chalk.red('\n' + error));
     process.exit(-1);
