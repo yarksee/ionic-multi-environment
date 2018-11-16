@@ -13,9 +13,10 @@ outputBanner();
 
 const envReader = require('./environment-reader');
 
-let envStr = JSON.stringify(envReader(process.cwd(), env));
+let envConfigData = envReader(process.cwd(), env);
+let envConfigDataStr = JSON.stringify(envReader(process.cwd(), env));
 let pathEnv = path.resolve(path.join('.', 'src', 'environments', 'environment.tmp'));
-fs.writeFileSync(pathEnv, `export const Environment = ${envStr}`);
+fs.writeFileSync(pathEnv, `export const Environment = ${envConfigDataStr}`);
 
 useDefaultConfig.dev.resolve.alias = {
   "@app/env": pathEnv
@@ -23,6 +24,27 @@ useDefaultConfig.dev.resolve.alias = {
 useDefaultConfig.prod.resolve.alias = {
   "@app/env": pathEnv
 };
+
+setProxy(envConfigData);
+
+/**
+ * Set serve's proxy
+ * @param {ionic.config.JSON} configData
+ */
+function setProxy(configData) {
+  let fileConfig = path.resolve('ionic.config.json');
+  if (!fs.existsSync(fileConfig)) {
+    return;
+  }
+  let config = JSON.parse(fs.readFileSync(fileConfig, 'utf-8'));
+  config.proxies = [];
+  config.proxies.push({
+    'proxyUrl': configData.baseUrl,
+    'path': configData.endpoint
+  });
+  console.log(chalk.blue(`Save config to ${fileConfig} \n `));
+  fs.writeFileSync(fileConfig, JSON.stringify(config));
+}
 
 function outputBanner() {
   let envCpy = env + '';

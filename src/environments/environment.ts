@@ -1,8 +1,8 @@
 export const Environment = {
   mode: 'dev',
   debug: true,
-  url: 'http://localhost:8080/dev/',
-  urlSuffix: '/ionic',
+  baseUrl: 'http://localhost:8080/dev/',
+  endpoint: '/ionic',
   defaultOnly: true,
   cordova: {
     name: 'Developer app.',

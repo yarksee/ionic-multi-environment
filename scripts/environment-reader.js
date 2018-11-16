@@ -32,9 +32,9 @@ module.exports = function (rootPath, env) {
 }
 
 /**
- * Copy 一个对象
- * @param {*} params 对象
- * @returns Copy 对象
+ * Copy Object
+ * @param {*} params object
+ * @returns Copy
  */
 function copy(params) {
   return JSON.parse(JSON.stringify(params));
