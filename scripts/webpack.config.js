@@ -31,8 +31,23 @@ useDefaultConfig.prod.resolve.alias = {
 };
 
 setProxy(envConfigData);
+
 if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
   require('./config-env')(envConfigData.mode); // Save config to config.xml
+
+  let glob = require('glob'),
+    path = require('path');
+
+  glob.sync(path.resolve('scripts', 'plugins') + '/*.js').forEach((file) => {
+    try {
+      console.log(`Find plugin: ${file}.`);
+      require(path.resolve(file))(path, fs, JSON.parse(JSON.stringify(envConfigData)));
+    } catch (error) {
+      console.error(chalk.red(` \n [Error] require(${file}) \n  \t ${error}`));
+    }
+  });
+  process.exit(-1)
+
   processPlatform();
 }
 
