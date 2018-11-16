@@ -7,41 +7,33 @@ module.exports = function (ctx) {
     path = ctx.requireCordovaModule('path'),
     deferral = ctx.requireCordovaModule('q').defer();
   let platformPath = path.join(ctx.opts.projectRoot, "platforms");
-  if (!fs.existsSync(platformPath)) {
-    try {
-      fs.mkdirSync(platformPath);
-    } catch (error) {
-      throw error;
-    }
-  }
   var argv = require('minimist')(process.argv.slice(2));
-  let env = argv.env ? argv.env : '';
-  if (env === '') {
-    console.log(chalk.yellow(`\n Environment: \t default`));
-  } else {
-    console.log(chalk.yellow(`\n Environment: \t ${env}`));
-  }
+  let envMode = argv.env;
+  let envData;
 
   let envConfigFile = path.resolve('src', 'environments', 'platform.env.json.tmp');
   const envWriter = require('../envconfig-writer');
-  if (!fs.existsSync(envConfigFile) ) {
-    _fs.removeSync(platformPath); // Remove dir platforms
-    if (!fs.existsSync(platformPath)) { // check
-      console.log(chalk.yellow(`\n Recreate dir: ${platformPath}...`));
-      fs.mkdirSync(platformPath);
+
+  if (fs.existsSync(envConfigFile)) { // Exist,compare input and file's envMode.
+    envData = JSON.parse(fs.readFileSync(envConfigFile, 'utf-8'));
+    if ((typeof envMode === "undefined" && typeof envData.mode === "undefined") || typeof envData.mode === "undefined") {
+      console.error(chalk.red(` \n [Error] missing --env or ${envConfigFile} propertie 'mode' was undefined.`));
+      process.exit(-1);
     }
-  } else {
-    let envData = JSON.parse(fs.readFileSync(envConfigFile, 'utf-8'));
-    const envReader = require('../environment-reader');
-    let configData = envReader(env);
-    if (!envData.mode | envData.mode !== configData.mode) {
-      _fs.removeSync(platformPath); // Remove dir platforms
+    if (typeof envMode === "undefined") {
+      envMode = envData.mode; //when missing '--env'
+    } else if (envMode !== envData.mode) { // overwrite file && remove platforms dir.
+      _fs.removeSync(platformPath); // Remove platforms
       if (!fs.existsSync(platformPath)) { // check
-        console.log(chalk.yellow(`\n Recreate dir: ${platformPath}...`));
+        console.log(chalk.yellow(`\n Recreate dir: ${platformPath}... \n `));
         fs.mkdirSync(platformPath);
       }
+      envWriter(envMode); // Save
     }
+  } else {
+    envWriter(envMode);
   }
-  envWriter(env);
-  return configTool(env);
+
+  console.log(chalk.yellow(`\n Environment: \t ${envMode} \n `));
+
 }
