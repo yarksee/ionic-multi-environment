@@ -19,7 +19,7 @@ module.exports = function (envMode) {
     process.exit(-1);
   }
 
-  let fileDefaltEnv = path.join(dirEnv, '/environment.ts');
+  let fileDefaltEnv = path.join(dirEnv, 'environment.ts');
   let envDefaut = require(fileDefaltEnv).Environment;
   let envConfig = require(fileEnv).Environment;
 

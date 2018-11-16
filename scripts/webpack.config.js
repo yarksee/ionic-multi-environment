@@ -15,7 +15,11 @@ outputBanner();
 const envReader = require('./environment-reader');
 
 let envConfigData = envReader(env);
-let envConfigDataStr = JSON.stringify(envConfigData);
+let envConfigDataCpy = JSON.parse(JSON.stringify(envConfigData));
+if (envConfigDataCpy.metadata) {
+  delete envConfigDataCpy.metadata;
+}
+let envConfigDataStr = JSON.stringify(envConfigDataCpy);
 let pathEnv = path.resolve(path.join('.', 'src', 'environments', 'environment.tmp'));
 fs.writeFileSync(pathEnv, `export const Environment = ${envConfigDataStr}`);
 

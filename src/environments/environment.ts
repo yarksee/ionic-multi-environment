@@ -8,5 +8,8 @@ export const Environment = {
     name: 'Developer app.',
     id: 'io.ionic.dev',
     version: '1.0.1'
+  },
+  metadata: { // this propertie will be removed when build.
+    googleMapKey: 'dev-google-maps-key'
   }
 }

@@ -4,5 +4,8 @@ export const Environment = {
   cordova: {
     name: 'UAT app.',
     id: 'io.ionic.uat'
+  },
+  metadata: {
+    googleMapKey: 'uat-google-maps-key'
   }
 }
