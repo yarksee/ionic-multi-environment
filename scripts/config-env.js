@@ -19,34 +19,28 @@ module.exports = function (env) {
     console.log("Copy config.xml to config.xml.bak");
     fs.copySync(configFile, bakFile);
   }
-  try {
-    let xmlData = fs.readFileSync(configFile, "utf-8");
-    return new Promise((resolve, reject) => {
-        xml2js.parseString(xmlData, function (err, config) {
-          if (err) {
-            reject(err);
-          }
-          resolve(config);
-        })
-      })
-      .then(config => {
-        config["widget"]["$"]["id"] = configData.cordova.id;
-        config["widget"]["$"]["version"] = configData.cordova.version;
-        config["widget"]["name"][0] = configData.cordova.name;
+  let xmlData = fs.readFileSync(configFile, "utf-8");
+  let config = parseStringSync(xmlData);
+  config.widget.$.id = configData.cordova.id;
+  config.widget.$.version = configData.cordova.version;
+  config.widget.name = [configData.cordova.name];
 
-        //Save to file.json --> xml˝
-        let builder = new xml2js.Builder();
-        let jsonxml = builder.buildObject(config);
-        try {
-          fs.writeFileSync(configFile, jsonxml);
-        } catch (error) {
-          console.error(`Throw exception when write: ${configFile}`);
-          console.error(error);
-          process.exit(-1);
-        }
-      })
+  //Save to file.json --> xml
+  let builder = new xml2js.Builder();
+  let jsonxml = builder.buildObject(config);
+  try {
+    fs.writeFileSync(configFile, jsonxml);
   } catch (error) {
-    console.error(`Throw exception when read: ${configFile}`);
+    console.error(`Throw exception when write: ${configFile}`);
+    console.error(error);
     process.exit(-1);
   }
+}
+
+function parseStringSync(xmlData) {
+  let result;
+  new xml2js.Parser().parseString(xmlData, (e, r) => {
+    result = r;
+  });
+  return result;
 }

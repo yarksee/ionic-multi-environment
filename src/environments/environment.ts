@@ -10,6 +10,7 @@ export const Environment = {
     version: '1.0.1'
   },
   metadata: { // this propertie will be removed when build.
-    googleMapKey: 'dev-google-maps-key'
+    googleMapKeyAndroid: 'dev-google-maps-key-android',
+    googleMapKeyIOS: 'dev-google-maps-key-ios'
   }
 }

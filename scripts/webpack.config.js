@@ -34,7 +34,6 @@ setProxy(envConfigData);
 
 if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
   require('./config-env')(envConfigData.mode); // Save config to config.xml
-
   let glob = require('glob'),
     path = require('path');
 
@@ -46,7 +45,6 @@ if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
       console.error(chalk.red(` \n [Error] require(${file}) \n  \t ${error}`));
     }
   });
-  process.exit(-1)
 
   processPlatform();
 }

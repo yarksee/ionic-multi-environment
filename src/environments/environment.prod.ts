@@ -7,6 +7,7 @@ export const Environment = {
     id: 'io.ionic.prod'
   },
   metadata: {
-    googleMapKey: 'prod-google-maps-key'
+    googleMapKeyAndroid: 'prod-google-maps-key-android',
+    googleMapKeyIOS: 'prod-google-maps-key-ios'
   }
 }

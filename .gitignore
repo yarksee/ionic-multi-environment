@@ -37,3 +37,4 @@ UserInterfaceState.xcuserstate
 # custom
 ./typings/
 *.bak
+!/scripts/plugins/

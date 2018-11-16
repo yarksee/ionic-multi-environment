@@ -1,7 +1,8 @@
 require('typescript-require');
-var chalk = require('chalk');
+const chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
+const objectAssignDeep = require(`object-assign-deep`);
 
 module.exports = function (envMode) {
   if (typeof envMode === "undefined") {
@@ -31,8 +32,9 @@ module.exports = function (envMode) {
     console.error(chalk.red(`${fileEnv} invaild.\n`));
     process.exit(-1);
   }
+  return objectAssignDeep(copy(envDefaut), envConfig);
 
-  return Object.assign(copy(envDefaut), envConfig);
+  // return Object.assign(copy(envDefaut), envConfig);
 }
 
 /**
