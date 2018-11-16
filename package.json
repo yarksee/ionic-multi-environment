@@ -8,7 +8,8 @@
     "start": "ionic-app-scripts serve",
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
-    "lint": "ionic-app-scripts lint"
+    "lint": "ionic-app-scripts lint",
+    "serve:uat": "ionic-app-scripts serve --env=uat"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",
@@ -35,6 +36,7 @@
     "ionicons": "3.0.0",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
+    "typescript-require": "^0.2.10",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
@@ -42,6 +44,9 @@
     "typescript": "2.6.2"
   },
   "description": "An Ionic project",
+  "config": {
+    "ionic_webpack": "./scripts/webpack.config.js"
+  },
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
