@@ -29,6 +29,9 @@ module.exports = function (ctx) {
       envWriter(envMode); // Save
     }
   } else {
+    if (typeof envMode === 'undefined') { // default env.
+      envMode = 'dev';
+    }
     envWriter(envMode);
   }
 
