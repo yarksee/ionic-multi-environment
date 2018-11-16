@@ -3,8 +3,8 @@ var chalk = require('chalk');
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function (rootPath, env) {
-  let dirEnv = path.join(rootPath, 'src', 'environments');
+module.exports = function (env) {
+  let dirEnv = path.resolve('src', 'environments');
   if (!fs.existsSync(dirEnv)) {
     console.error(chalk.red(`${dirEnv} not exist! \n `));
     process.exit(-1);

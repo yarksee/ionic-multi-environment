@@ -6,6 +6,7 @@ export const Environment = {
   defaultOnly: true,
   cordova: {
     name: 'Developer app.',
-    id: 'io.ionic.dev'
+    id: 'io.ionic.dev',
+    version: '1.0.1'
   }
 }

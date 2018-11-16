@@ -13,7 +13,7 @@ outputBanner();
 
 const envReader = require('./environment-reader');
 
-let envConfigData = envReader(process.cwd(), env);
+let envConfigData = envReader(env);
 let envConfigDataStr = JSON.stringify(envReader(process.cwd(), env));
 let pathEnv = path.resolve(path.join('.', 'src', 'environments', 'environment.tmp'));
 fs.writeFileSync(pathEnv, `export const Environment = ${envConfigDataStr}`);
@@ -68,6 +68,36 @@ function outputBanner() {
     `*                                *\n` +
     `**********************************\n`
   ));
+}
+
+function processPlatform() {
+  let platform = process.env.IONIC_PLATFORM;
+  // 判断当前环境
+  let envConfigFile = path.resolve("src", 'environments', "platform.env.json.tmp");
+  if (!fs.existsSync(envConfigFile)) {
+    console.error(chalk.red(`\n Please readd flatform at first.`));
+    process.exit(-1);
+  }
+  try {
+    let envConfig = JSON.parse(fs.readFileSync(envConfigFile, "utf-8"));
+    if (envConfig["environment"] === env) {
+      console.log(chalk.blue("Environment has no changed!. \n ")); // env 没有改动，继续编译
+      return;
+    }
+    // env 有变动，重新添加 platform
+    let currentEnv = envConfig["environment"];
+    console.log(chalk.blue(`Environment will change: ${currentEnv} ====> ${env} \n `));
+    let execSync = require('child_process').execSync;
+    execSync(`ionic cordova platform remove ${platform}`);
+    execSync(`ionic cordova platform add ${platform}  -- --env=${env}`);
+    // envConfig["environment"] = env;
+    // fs.writeFileSync(envConfigFile, JSON.stringify(envConfig));
+    // console.log(chalk.blue("Save environment.config. \n "));
+  } catch (error) {
+    console.error(chalk.red('\n' + error));
+    process.exit(-1);
+  }
+
 }
 
 module.exports = function () {
