@@ -30,8 +30,6 @@ useDefaultConfig.prod.resolve.alias = {
   "@app/env": pathEnv
 };
 
-setProxy(envConfigData);
-
 if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
   require('./config-env')(envConfigData.mode); // Save config to config.xml
   let glob = require('glob'),
@@ -47,25 +45,6 @@ if (process.env.IONIC_PLATFORM) { // Try to build cordova native app
   });
 
   processPlatform();
-}
-
-/**
- * Set serve's proxy
- * @param {ionic.config.JSON} configData
- */
-function setProxy(configData) {
-  let fileConfig = path.resolve('ionic.config.json');
-  if (!fs.existsSync(fileConfig)) {
-    return;
-  }
-  let config = JSON.parse(fs.readFileSync(fileConfig, 'utf-8'));
-  config.proxies = [];
-  config.proxies.push({
-    'proxyUrl': configData.baseUrl,
-    'path': configData.endpoint
-  });
-  console.log(chalk.blue(`Save config to ${fileConfig} \n `));
-  fs.writeFileSync(fileConfig, JSON.stringify(config));
 }
 
 function outputBanner() {
