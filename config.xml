@@ -21,6 +21,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <hook src="scripts/hooks/before_platform_add.js" type="before_platform_add" />
     <platform name="android">
+        <hook src="scripts/hooks/move_android_keys.js" type="before_compile" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
