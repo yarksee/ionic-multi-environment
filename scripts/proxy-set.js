@@ -1,8 +1,7 @@
-const envMode = process.env.env;
+const envMode = process.env.ENV_MODE;
 if (typeof envMode === 'undefined') {
   return;
 }
-
 const envReader = require('./environment-reader');
 const chalk = require("chalk");
 const fs = require('fs');

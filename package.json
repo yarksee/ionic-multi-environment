@@ -9,8 +9,8 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
-    "serve:uat": "env=uat node ./scripts/proxy-set.js && ionic-app-scripts serve --env=uat",
-    "serve:prod": "env=prod node ./scripts/proxy-set.js && ionic-app-scripts serve --env=prod"
+    "ionic:serve": "ionic-app-scripts serve",
+    "ionic:serve:before": "node ./scripts/proxy-set.js"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",
@@ -64,8 +64,8 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "prod-google-maps-key-android",
-        "API_KEY_FOR_IOS": "prod-google-maps-key-ios",
+        "API_KEY_FOR_ANDROID": "dev-google-maps-key-android",
+        "API_KEY_FOR_IOS": "dev-google-maps-key-ios",
         "PLAY_SERVICES_VERSION": "15.0.1",
         "ANDROID_SUPPORT_V4_VERSION": "27.+",
         "LOCATION_WHEN_IN_USE_DESCRIPTION": "This app wants to get your location while this app runs only.",

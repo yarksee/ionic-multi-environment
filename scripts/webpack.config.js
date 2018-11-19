@@ -5,7 +5,7 @@ const path = require('path');
 const useDefaultConfig = require('@ionic/app-scripts/config/webpack.config.js');
 
 var argv = require('minimist')(process.argv.slice(2));
-var env = argv.env ? argv.env : 'dev'; // Set default env='dev'
+var env = process.env.ENV_MODE ? process.env.ENV_MODE : 'dev'; // Set default env='dev'
 var release = argv.release ? true : false;
 
 outputBanner();
@@ -78,7 +78,7 @@ function processPlatform() {
   try {
     let envConfig = JSON.parse(fs.readFileSync(envConfigFile, "utf-8"));
     if (typeof envConfig.mode === "undefined") {
-      console.error(chalk.red(` \n [Error] missing --env or ${envConfigFile} propertie 'mode' was undefined.`));
+      console.error(chalk.red(` \n [Error] missing --env or ${envConfigFile} propertie 'ENV_MODE' was undefined.`));
       process.exit(-1);
     }
     if (envConfig.mode === env) {

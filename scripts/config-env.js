@@ -2,14 +2,14 @@ const xml2js = require('xml2js');
 const fs = require('fs-extra');
 const chalk = require("chalk");
 const path = require('path');
-module.exports = function (env) {
-  if (typeof env === "undefined") {
-    console.error(chalk.red(" \n Env was require!"));
+module.exports = function (ENV_MODE) {
+  if (typeof ENV_MODE === "undefined") {
+    console.error(chalk.red(" \n ENV_MODE was require!"));
     process.exit(-1);
   }
 
   const envReader = require('./environment-reader');
-  let configData = envReader(env);
+  let configData = envReader(ENV_MODE);
 
   let configFile = path.resolve('config.xml');
 

@@ -6,8 +6,7 @@ module.exports = function (ctx) {
     path = ctx.requireCordovaModule('path'),
     deferral = ctx.requireCordovaModule('q').defer();
   let platformPath = path.join(ctx.opts.projectRoot, "platforms");
-  var argv = require('minimist')(process.argv.slice(2));
-  let envMode = argv.env;
+  let envMode = process.env.ENV_MODE;
   let envData;
 
   let envConfigFile = path.resolve('src', 'environments', 'platform.env.json.tmp');
