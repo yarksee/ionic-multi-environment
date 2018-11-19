@@ -614,20 +614,20 @@ function parseStringSync(xmlData) {
 1. 创建`debug-keys.jks`及`release-keys.jks`两个证书文件，并写好对应的`*.properties`文件，放至`etc/sign/`目录下
     ```
     .
-├── README.md
-├── config.xml
-├── etc
-│   └── sign
-│       ├── debug-keys.jks
-│       ├── debug-signing.properties
-│       ├── release-keys.jks
-│       └── release-signing.properties
-├── ionic.config.json
-├── package-lock.json
-├── package.json
-├── tsconfig.json
-├── tslint.json
-└── yarn.lock
+    ├── README.md
+    ├── config.xml
+    ├── etc
+    │   └── sign
+    │       ├── debug-keys.jks
+    │       ├── debug-signing.properties
+    │       ├── release-keys.jks
+    │       └── release-signing.properties
+    ├── ionic.config.json
+    ├── package-lock.json
+    ├── package.json
+    ├── tsconfig.json
+    ├── tslint.json
+    └── yarn.lock
     ```
 
 2. 编写对应的`*.properties`文件
@@ -639,7 +639,7 @@ function parseStringSync(xmlData) {
     keyPassword=debugdebug
     ```
 
-1. 创建`scripts/hooks/move_android_keys.js`
+3. 创建`scripts/hooks/move_android_keys.js`
     `move_android_keys.js`
     ```javascript
     var chalk = require('chalk');
@@ -659,6 +659,14 @@ function parseStringSync(xmlData) {
         _fs.copyFileSync(path.join(pathSign, file), path.join(pathAndroid, file));
       });
     }
+    ```
+4. 在`config.xml`中插入
+    ```xml
+    <widget>
+        <platform name="android">
+            <hook src="scripts/hooks/move_android_keys.js" type="before_compile" />
+        </platform>
+    </widget>
     ```
 
 ### 测试
@@ -706,3 +714,6 @@ BUILD SUCCESSFUL in 4s
 │       └── environment.uat.ts
 └── tsconfig.json
 ```
+
+## Github
+[log2c/ionic-multi-environment](https://github.com/log2c/ionic-multi-environment)
